@@ -100,6 +100,7 @@ private Vector3 originalPosition;
       int x,y,z;
       GetXZ(worldPosition,out y,out x, out z);
       return getValue(x,z);
+      //addition
   }
 }
 
