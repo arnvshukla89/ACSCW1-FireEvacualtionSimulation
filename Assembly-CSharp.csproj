@@ -37,8 +37,14 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets/Scenes/Scripts/GridBuilder.cs" />
+     <Compile Include="Assets/Scenes/Scripts/CharacterMovement.cs" />
+     <Compile Include="Assets/Scenes/Scripts/GridSystemBackup.cs" />
+     <Compile Include="Assets/Scenes/Scripts/MoveChar.cs" />
+     <Compile Include="Assets/Scenes/Scripts/FlyingCharacter.cs" />
      <Compile Include="Assets/Scenes/Scripts/Pathfinding.cs" />
      <Compile Include="Assets/Scenes/Scripts/PathNode.cs" />
+     <Compile Include="Assets/Scenes/Scripts/Mouse3D.cs" />
+     <Compile Include="Assets/Scenes/Scripts/MovingCharacter.cs" />
      <Compile Include="Assets/Scenes/Scripts/utils.cs" />
      <Compile Include="Assets/Scenes/Scripts/GridSystem.cs" />
      <Compile Include="Assets/Scenes/Scripts/PathfindingVisual.cs" />
@@ -71,6 +77,7 @@
      <None Include="Assets/HighQualityBricks&amp;Walls/Shaders/shading-671263.shader" />
      <None Include="Assets/HighQualityBricks&amp;Walls/Shaders/wall-617961.shader" />
      <None Include="Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt" />
+     <None Include="Assets/Snowconesolid Assets/Block People/Snowconesolid Assets ReadMe.txt" />
      <None Include="Assets/HighQualityBricks&amp;Walls/Shaders/wood-877365.shader" />
      <None Include="Assets/TextMesh Pro/Resources/Shaders/TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets/HighQualityBricks&amp;Walls/Shaders/wall-846013.shader" />
@@ -676,6 +683,42 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
         <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Searcher.Editor">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.Searcher.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Editor">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+        <HintPath>/Users/arnavshukla/FireEvacualtionSimulation/Library/ScriptAssemblies/Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
