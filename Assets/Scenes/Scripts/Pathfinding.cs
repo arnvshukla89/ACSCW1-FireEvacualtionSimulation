@@ -14,18 +14,44 @@ public class Pathfinding{
       builder = new GridBuilder<PathNode>(width, height, 5f, Vector3.zero,(GridBuilder<PathNode> g, int x, int y) => new PathNode(g,x,y));  
    }*/
 public Pathfinding(GridBuilder<PathNode> builder){
-        Instance = this;
+       Instance = this;
       this.builder = builder;
    }
    public GridBuilder<PathNode> GetGridBuilder(){
        return builder;
    } 
+      public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition){
+       builder.GetXZ(startWorldPosition , out int startX, out int startZ);
+   builder.GetXZ(endWorldPosition, out int endX, out int endZ);
+       Debug.Log("values :" + startX + startZ + endX + endZ );
+List<PathNode> path = FindPath(startX, startZ, endX , endZ);
+  if(path == null){
+      Debug.Log("This is the pathnode list if null"+ path);
+      return null;
+  }else{
+       Debug.Log("This is the pathnode list if not null"+ path);
+      List<Vector3> vectorPath = new List<Vector3>();
+      foreach (PathNode pathnode in path)
+      {
+         vectorPath.Add(new Vector3(pathnode.x ,0, pathnode.z)* builder.GetCellSize() +Vector3.one *  builder.GetCellSize() * .5f); 
+      }
+      Debug.Log("This is the vectorpath list"+ vectorPath.Count);
+      return vectorPath;
+  }
+   }
+
    public List<PathNode> FindPath(int startX, int startZ, int endX, int endZ){
       PathNode startNode=builder.getValue(startX,startZ);
-      PathNode endNode=builder.getValue(endX, endZ);
+      PathNode endNode=builder.getValue(endX,endZ);
+      Debug.Log("startNode"+startNode);
+       Debug.Log("endNode"+endNode);
+         if (startNode == null || endNode == null) {
+            return null;
+        }
       openList= new List<PathNode>{ startNode };
+       Debug.Log("openList"+openList.Count);
       closedList= new List<PathNode>(); 
-
+ Debug.Log("closedList"+closedList.Count);
      for(int x=0; x< builder.GetWidth(); x++){
          for(int z=0; z < builder.GetHeight(); z++){
              PathNode pathNode = builder.getValue(x, z);
@@ -37,24 +63,35 @@ public Pathfinding(GridBuilder<PathNode> builder){
          }
      } 
      startNode.gCost = 0;
+      Debug.Log("startNode.gCost"+startNode.gCost);
      startNode.hCost = calculateDistance(startNode, endNode);
+       Debug.Log("startNode.hCost"+startNode.hCost);
      startNode.CalculateFCost();
 
      while(openList.Count > 0){
         PathNode currentNode =GetLowestFCostNode(openList);
+          Debug.Log("currentNode"+currentNode);
         if(currentNode == endNode){
+           Debug.Log("calculatePath(endNode)"+calculatePath(endNode));
             return calculatePath(endNode);
         }
         openList.Remove(currentNode);
         closedList.Add(currentNode);
+          Debug.Log("neighbour List"+GetNeighbourList(currentNode));
+          Debug.Log("neighbour List"+GetNeighbourList(currentNode).Count);
 foreach (PathNode neighbourNode in GetNeighbourList(currentNode)){
+     Debug.Log("Inside the loop for iterating through neighbour list");
     if(closedList.Contains(neighbourNode)) continue;
+  
   if(!neighbourNode.isWalkable){
       closedList.Add(neighbourNode);
       continue;
-
   }
   int tentativeGCost = currentNode.gCost + calculateDistance(currentNode, neighbourNode);
+    Debug.Log(" current node gcost"+ currentNode.gCost);
+  Debug.Log("calculateDistance current"+ calculateDistance(currentNode, neighbourNode));
+   Debug.Log("tentativeGCost"+ tentativeGCost);
+
                 if (tentativeGCost < neighbourNode.gCost) {
                     neighbourNode.cameFromNode = currentNode;
                     neighbourNode.gCost = tentativeGCost;
@@ -63,6 +100,7 @@ foreach (PathNode neighbourNode in GetNeighbourList(currentNode)){
 
                     if (!openList.Contains(neighbourNode)) {
                         openList.Add(neighbourNode);
+                        Debug.Log("openList again"+openList.Count);
                     }
                 }
 

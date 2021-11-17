@@ -70,8 +70,8 @@ private Vector3 originalPosition;
       }
 }
   public void setValue(Vector3 worldPosition, TGridBuilderObject value){
-      int x,y,z;
-      GetXZ(worldPosition,out x,out y,out z);
+      int x,z;
+      GetXZ(worldPosition,out x,out z);
       setValue(x,z,value);
 
   }
@@ -79,10 +79,9 @@ private Vector3 originalPosition;
   if (OnGridValueChanged != null) OnGridValueChanged(this, new OnGridValueChangedEventArgs { x = x, z = z });
 
   }
-  public void GetXZ(Vector3 worldPosition, out int x, out int z, out int y){
+  public void GetXZ(Vector3 worldPosition, out int x, out int z){
       x= Mathf.FloorToInt((worldPosition-originalPosition).x/cellSize);
       z= Mathf.FloorToInt((worldPosition-originalPosition).z/cellSize);
-      y= Mathf.FloorToInt((worldPosition-originalPosition).y/cellSize);
 
   }
   public TGridBuilderObject getValue(int x,int z)   {
@@ -97,8 +96,8 @@ private Vector3 originalPosition;
             return new Vector3(x, 0, z)* cellSize + originalPosition;
         }
   public TGridBuilderObject getValue(Vector3 worldPosition){
-      int x,y,z;
-      GetXZ(worldPosition,out y,out x, out z);
+      int x,z;
+      GetXZ(worldPosition,out x, out z);
       return getValue(x,z);
       //addition
   }
