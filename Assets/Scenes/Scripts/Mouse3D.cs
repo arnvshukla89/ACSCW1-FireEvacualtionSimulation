@@ -23,7 +23,7 @@ public class Mouse3D : MonoBehaviour {
 
     private Vector3 GetMouseWorldPosition_Instance() {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.Log(ray);
+        //Debug.Log(ray);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, mouseColliderLayerMask)) {
             return raycastHit.point;
         } else {

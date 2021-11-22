@@ -7,7 +7,7 @@ public class MovingCharacter : MonoBehaviour
       private int currentPathIndex;
     private List<Vector3> pathVectorList;
     private GameObject person;
-     private const float speed = 10f;
+     private const float speed = 60f;
 
     private void Update() {
         HandleMovement();
