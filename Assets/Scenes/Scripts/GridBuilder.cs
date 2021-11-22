@@ -30,7 +30,7 @@ private Vector3 originalPosition;
          }
      }
      
-      bool showDebug=true;
+      bool showDebug=false;
       if(showDebug){
       TextMesh[,] debugArray= new TextMesh[width, height];
      for (int x = 0; x<GridMatrix.GetLength(0); x++){
