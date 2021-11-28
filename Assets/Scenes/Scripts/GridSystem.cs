@@ -13,11 +13,10 @@ public class GridSystem : MonoBehaviour
 [SerializeField] private BuildWall wall;
 [SerializeField] private BuildWall wall1;
 [SerializeField] private BuildWall wall2;
-[SerializeField] private Transform Character;
 [SerializeField] private ThreeExitMove charM;
 [SerializeField] private Transform Fire;
 private List<GameObject> player;
- public static Pathfinding Instance { get; private set; }
+ public static GridSystem Instance { get; private set; }
    private GridBuilder<PathNode> grid;
    private GridBuilder<PathNode> grid1;
 private GridBuilder<PathNode> grid2;
@@ -35,7 +34,7 @@ private GridBuilder<PathNode> grid2;
    
 //public static GridSystem Instance { get; private set;}
    private void Awake() {
-      //Instance = this;
+      Instance = this;
        int gridWidth = 35;
        int gridHeight = 25;
        float cellSize =5f;
@@ -53,24 +52,26 @@ buildLandscape();
    }
 
 private void Update() {
-     if(Input.GetMouseButtonDown(0)){
+    /* if(Input.GetMouseButtonDown(0)){
 buildaCharacter(Character,Mouse3D.GetMouseWorldPosition());
 player.Add(GameObject.Find("Blocky_Dude_Red_Mobile_2"));
-    }
+    }*/
          if(Input.GetMouseButtonDown(1)){
 BuildFire(Fire, Mouse3D.GetMouseWorldPosition());
     } 
    }
 private void FixedUpdate() {
-   Debug.Log("number of players counting"+ player.Count);
-    if(Input.GetKeyDown("space")){
- charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));    
-    }
- if(player.Count>0){
-  charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));  
- }
+  // Debug.Log("number of players counting"+ player.Count);
+   // if(Input.GetKeyDown("space")){
+ //charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));
+ //Timer.Create(() => charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f)),1f);    
+   // charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));
+    //}
+ //if(player.Count>0){
+  //charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));  
+ //}
 }
-   public void buildaCharacter(Transform prefab, Vector3 PrefabPosition){
+   public Transform buildaCharacter(Transform prefab, Vector3 PrefabPosition){
          //Vector3 blockchar = ((new Vector3(5,0,5) * 5f) + (new Vector3(1,0,1) * 2.5f));
         pathfinding.GetGridBuilder().GetXZ(PrefabPosition, out int x, out int z);
    //Debug.Log(Mouse3D.GetMouseWorldPosition());
@@ -80,10 +81,11 @@ private void FixedUpdate() {
   Transform builtT = Instantiate(prefab,grid.GetWorldPosition(x,z)+(new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
   //Instantiate(prefab,grid.GetWorldPosition(x,z)+ (new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
    pathNode.SetTransform(builtT);
-   pathfinding.GetNode(x,z).SetIsWalkable(false);  
+  // pathfinding.GetNode(x,z).SetIsWalkable(false);  
+  return builtT; 
    }
-
-   }
+return null;
+   } 
       public void BuildFire(Transform prefab, Vector3 PrefabPosition){
          //Vector3 blockchar = ((new Vector3(5,0,5) * 5f) + (new Vector3(1,0,1) * 2.5f));
         pathfinding.GetGridBuilder().GetXZ(PrefabPosition, out int x, out int z);
