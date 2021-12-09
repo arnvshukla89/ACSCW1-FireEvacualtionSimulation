@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 public class GridSystem : MonoBehaviour
 {
@@ -98,8 +99,8 @@ return null;
     pathfinding.GetNode(x,z).SetIsWalkable(false); 
     pathfinding.GetNode(x+1,z).SetIsWalkable(false);
     pathfinding.GetNode(x,z+1).SetIsWalkable(false);    
-   // pathfinding.GetNode(x-1,z).SetIsWalkable(false); 
-     //pathfinding.GetNode(x,z-1).SetIsWalkable(false); 
+    pathfinding.GetNode(x-1,z).SetIsWalkable(false); 
+   pathfinding.GetNode(x,z-1).SetIsWalkable(false); 
    }
 
    }

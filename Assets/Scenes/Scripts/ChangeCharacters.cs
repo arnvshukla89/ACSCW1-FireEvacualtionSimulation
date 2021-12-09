@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class ChangeCharacters : MonoBehaviour {
 //private GridBuilder grid;
 //private Pathfinding pathfinding;
@@ -11,6 +10,7 @@ public class ChangeCharacters : MonoBehaviour {
 [SerializeField] private Transform Character2;
 List<Transform> CharTransform =new List<Transform>();
 public static ChangeCharacters Instance { get; private set; }
+private bool abc;
 
 private void Awake(){
 Instance =this;
@@ -25,6 +25,10 @@ items.Add("Male");
 
 foreach(var item in items){
     dropdown.options.Add(new Dropdown.OptionData(){text = item});
+
+  if(Input.GetKeyDown("space")){  
+     abc = true;       
+        }  
 }
 DropdownItemSelected(dropdown);
 //Debug.Log("Value of index in start method" + index);
@@ -32,6 +36,7 @@ dropdown.onValueChanged.AddListener(delegate{DropdownItemSelected(dropdown);});
 }
 public void DropdownItemSelected(Dropdown dropdown){
 int index = dropdown.value;
+if(abc == false && CharTransform.Count<50){
 if(index==0){
    //var canvas = transform.GetComponent<Canvas>();
    // if(Input.GetMouseButtonDown(0) && !canvas){
@@ -41,10 +46,11 @@ if(index==0){
 }
 if(index==1){
    var canvas = transform.GetComponent<Canvas>();
-    if(Input.GetMouseButtonDown(0) && !canvas){
+    if(Input.GetMouseButtonDown(0) && !canvas){  
 Transform girl =GridSystem.Instance.buildaCharacter(Character1,Mouse3D.GetMouseWorldPosition());
     if(girl!=null){
     CharTransform.Add(girl);
+  //  HeadCount.text = CharTransform.Count.ToString();
     }
     Debug.Log("Number of Character transform List if index =1" + CharTransform.Count);
     }
@@ -61,6 +67,14 @@ Transform dude=GridSystem.Instance.buildaCharacter(Character2,Mouse3D.GetMouseWo
     }
     Debug.Log("Number of Character transform List if index =2" + CharTransform.Count + CharTransform);
 }
+} else if(abc != false){
+   
+    transform.GetComponent<Dropdown>().enabled = false;
+
+}
+}
+public int numberofPlayers{
+    get {return CharTransform.Count;}
 }
 public List<Transform> characterL(){
     if(CharTransform !=null){
