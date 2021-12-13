@@ -24,6 +24,7 @@ private GridBuilder<PathNode> grid2;
     private Pathfinding pathfinding;
    private Pathfinding pathfinding1;
    private Pathfinding pathfinding2;
+   private static int transform_index = 1;
      private const float speed = 1f;
     private int currentPathIndex;
     private Vector3 startP = Vector3.zero;
@@ -81,6 +82,8 @@ private void FixedUpdate() {
    if(pathNode.CanBuild()){
   Transform builtT = Instantiate(prefab,grid.GetWorldPosition(x,z)+(new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
   //Instantiate(prefab,grid.GetWorldPosition(x,z)+ (new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
+   builtT.name ="player" + transform_index;
+   transform_index ++;
    pathNode.SetTransform(builtT);
   // pathfinding.GetNode(x,z).SetIsWalkable(false);  
   return builtT; 
@@ -96,11 +99,25 @@ return null;
    if(pathNode.CanBuild()){
   Transform builtT = Instantiate(prefab,grid.GetWorldPosition(x,z)+(new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
    pathNode.SetTransform(builtT);
-    pathfinding.GetNode(x,z).SetIsWalkable(false); 
-    pathfinding.GetNode(x+1,z).SetIsWalkable(false);
-    pathfinding.GetNode(x,z+1).SetIsWalkable(false);    
+   pathfinding.GetNode(x,z).SetIsWalkable(false); 
+    pathfinding.GetNode(x,z+1).SetIsWalkable(false);
+    if(x!=0){
     pathfinding.GetNode(x-1,z).SetIsWalkable(false); 
+    }   
+    pathfinding.GetNode(x+1,z).SetIsWalkable(false); 
+    if(z!=0){
    pathfinding.GetNode(x,z-1).SetIsWalkable(false); 
+    }
+    if(x!=0 || z!=0){
+    pathfinding.GetNode(x-1,z+1).SetIsWalkable(false);
+    }
+    if(x!=0 || z!=0){
+     pathfinding.GetNode(x-1,z-1).SetIsWalkable(false); 
+    } 
+      pathfinding.GetNode(x+1,z+1).SetIsWalkable(false); 
+      if(z!=0){
+       pathfinding.GetNode(x+1,z-1).SetIsWalkable(false); 
+      }
    }
 
    }

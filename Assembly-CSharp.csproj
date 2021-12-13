@@ -38,15 +38,12 @@
   <ItemGroup>
      <Compile Include="Assets/Scenes/Scripts/GridBuilder.cs" />
      <Compile Include="Assets/Scenes/Scripts/CharacterMovement.cs" />
-     <Compile Include="Assets/Scenes/Scripts/GridSystemBackup.cs" />
-     <Compile Include="Assets/Scenes/Scripts/MoveChar.cs" />
      <Compile Include="Assets/Scenes/Scripts/FlyingCharacter.cs" />
      <Compile Include="Assets/Scenes/Scripts/Pathfinding.cs" />
      <Compile Include="Assets/Scenes/Scripts/ChangeCharacters.cs" />
      <Compile Include="Assets/Scenes/Scripts/PathNode.cs" />
      <Compile Include="Assets/Scenes/Scripts/Mouse3D.cs" />
      <Compile Include="Assets/Scenes/Scripts/CreateFloor.cs" />
-     <Compile Include="Assets/Scenes/Scripts/MovingCharacter.cs" />
      <Compile Include="Assets/Scenes/Scripts/ThreeExitMove.cs" />
      <Compile Include="Assets/Scenes/Scripts/BuildWall.cs" />
      <Compile Include="Assets/Scenes/Scripts/Timer.cs" />

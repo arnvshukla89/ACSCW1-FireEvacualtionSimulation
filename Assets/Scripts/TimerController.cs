@@ -3,53 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class TimerController : MonoBehaviour
 {
-    public static TimerController instance;
 
-    public Text timeCounter;
+public static TimerController Instance { get; private set; }
+   [SerializeField] private TextMeshProUGUI SimulationTiming;
+       private float time;
 
-    private TimeSpan timePlaying;
-    private bool timerGoing;
+       private void Awake() {
+           Instance =this;
+       }
+       private void Start() {
+          SimulationTiming.text="Time: 00:00:000";
+       }
+       private void FixedUpdate() {
 
-    private float elapsedTime;
-
-    private void Awake()
+           if(ChangeCharacters.Instance.numberofPlayers>0){
+            time = ThreeExitMove.Instance.timer;
+         DisplayTime(time);
+       }
+}
+    public void DisplayTime(float timeToDisplay)
     {
-        instance = this;
-    }
-
-    private void Start()
-    {
-        timeCounter.text = "Time: 00:00.00";
-        timerGoing = false;
-    }
-
-    public void BeginTimer()
-    {
-        timerGoing = true;
-        elapsedTime = 0f;
-
-        StartCoroutine(UpdateTimer());
-    }
-
-    public void EndTimer()
-    {
-        timerGoing = false;
-    }
-
-    private IEnumerator UpdateTimer()
-    {
-        while (timerGoing)
-        {
-            elapsedTime += Time.deltaTime;
-            timePlaying = TimeSpan.FromSeconds(elapsedTime);
-            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss'.'ff");
-            timeCounter.text = timePlayingStr;
-
-            yield return null;
-        }
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+        float miniseconds = timeToDisplay % 1 * 1000;
+        
+  SimulationTiming.text = "Time:"+string.Format("{0:00}:{1:00}:{2:000}", minutes,  seconds, miniseconds);
     }
     
 }
