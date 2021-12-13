@@ -85,7 +85,7 @@ private void FixedUpdate() {
    builtT.name ="player" + transform_index;
    transform_index ++;
    pathNode.SetTransform(builtT);
-  // pathfinding.GetNode(x,z).SetIsWalkable(false);  
+  //pathfinding.GetNode(x,z).SetIsWalkable(false);  
   return builtT; 
    }
 return null;

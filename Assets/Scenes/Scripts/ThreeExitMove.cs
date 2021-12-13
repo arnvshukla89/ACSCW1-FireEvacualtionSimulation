@@ -121,7 +121,7 @@ mainbody = Vector3.zero;
         if(gameObject.transform.name.Contains("player") && other.gameObject.transform.name.Contains("player")){
             collisionmethodCounter++;
             Debug.Log("Collisionmethod counter"+collisionmethodCounter);
-            if(gameObject.transform.position.x>other.gameObject.transform.position.x){
+           // if(gameObject.transform.position.x>other.gameObject.transform.position.x){
             Debug.Log("About the first body" +gameObject.transform.name+gameObject.transform.position);
               Debug.Log("About the second colliding body" +other.gameObject.transform.name+other.gameObject.transform.position);
               Debug.Log("Collision counter");
@@ -130,12 +130,13 @@ string body = gameObject.transform.name;
 string collider = other.gameObject.transform.name;
 Vector3 colliderP =other.gameObject.transform.position;
 Vector3 bodyP =gameObject.transform.position;
-oncollision?.Invoke(this,new OnCollisionEvent{ bodyP = bodyP, colliderP = colliderP});
+//oncollision?.Invoke(this,new OnCollisionEvent{ bodyP = bodyP, colliderP = colliderP});
 /*if(colliderP ==rb.transform.position){
 }
 collidingwiththisbody = colliderP;
 mainbody =bodyP;*/
-        }
+collision = true;
+        //}
 
     }
     }
@@ -169,7 +170,7 @@ position = position +Direction *speed*Time.deltaTime;
             // Debug.Log("this eucledean distance travelled:" + Mathf.Abs((Vector3.Distance(transform.position, targetPosition)*2)-distanceBefore));
              //-------------------------------------------------------///
 
-oncollision = (object sender,OnCollisionEvent eventArgs) =>{
+/*oncollision = (object sender,OnCollisionEvent eventArgs) =>{
     Debug.Log("This is collider and main body position:"+eventArgs.colliderP+eventArgs.bodyP+"and this is the current moving body position"+rb.transform.position);
 if(eventArgs.bodyP == rb.transform.position){
 
@@ -181,10 +182,14 @@ if(eventArgs.bodyP == rb.transform.position){
 //Timer.Create(() => moveCharacters(rb.transform.position,moveDir,speed),1f);
 }
 
-};
+};*/
 if(collision ==true){
-    yield return new WaitForSeconds(0.2f);
+    //yield return new WaitForSeconds(0.5f);
+    yield return new WaitForSeconds(0.1f);
     collision = false;
+    if(rb.transform.name == max){
+        time += 0.1f;
+    }
 }
 rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime; 
 
@@ -209,9 +214,6 @@ rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime
                 if (currentPathIndex >= pathVectorList.Count) {
                     EvacuationcounterGS =1;
                     CharacterList.Remove(gameObject.transform);
-                    if(gameObject.transform.name==max){
-                    time=0f;
-                    }
                     Destroy(gameObject);
                       if(CharacterList.Count==0){
                         timerbool =false;
@@ -246,8 +248,9 @@ rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime
        // Debug.Log("Current position in SetTargetPosition method" + GetPosition());
         pathVectorList = Pathfinding.Instance.ShortestTarget(GetPosition(), targetPosition,targetPosition2,targetPosition3);
  //Debug.Log("pathVectorList in SetTargetPosition method" + pathVectorList.Count);
+
  if(GetName().Contains("player")){
-     if(FarthestCharacter !=null && !FarthestCharacter.ContainsKey(GetName())){
+     if(FarthestCharacter !=null && pathVectorList!=null&&!FarthestCharacter.ContainsKey(GetName())){
      FarthestCharacter.Add(GetName(),pathVectorList.Count);
      }
      //Debug.Log("adding into dictionary");
