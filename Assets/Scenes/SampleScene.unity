@@ -1817,7 +1817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Character1: {fileID: 495402, guid: 2a4b106be5fc467468239514932eff41, type: 3}
   Character2: {fileID: 474454, guid: 6c3f44416aaec9a4c861dcfcbe599504, type: 3}
-  threeexit: {fileID: 1246395340}
 --- !u!4 &1246395341
 Transform:
   m_ObjectHideFlags: 0
@@ -2199,7 +2198,7 @@ MonoBehaviour:
   wall1: {fileID: 0}
   wall2: {fileID: 0}
   charM: {fileID: 6245602679125059732, guid: 2a4b106be5fc467468239514932eff41, type: 3}
-  Fire: {fileID: 2277087182404021974, guid: 86d053d24919d4fe6b3aa1ae7e4d6676, type: 3}
+  Fire: {fileID: 682884941679100141, guid: 3fb433a6b3c074b8092a354e7e06d2f7, type: 3}
 --- !u!4 &1688433884
 Transform:
   m_ObjectHideFlags: 0

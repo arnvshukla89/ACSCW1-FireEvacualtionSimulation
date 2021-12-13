@@ -29,12 +29,17 @@ private GridBuilder<PathNode> grid2;
     private int currentPathIndex;
     private Vector3 startP = Vector3.zero;
      private Vector3 endP = Vector3.zero;
+
+     private float ResponseTimer = 0f;
+     private bool RTimeBool =false;
+     public bool Rtimerbool{ get { return RTimeBool;}}
+     public float Rtimer{ get { return ResponseTimer; } 
+     set{ ResponseTimer = value;}}
   private utils Utils;
     public Pathfinding GetPath(){
        return pathfinding;
    }
    
-//public static GridSystem Instance { get; private set;}
    private void Awake() {
       Instance = this;
        int gridWidth = 35;
@@ -60,7 +65,18 @@ player.Add(GameObject.Find("Blocky_Dude_Red_Mobile_2"));
     }*/
          if(Input.GetMouseButtonDown(1)){
 BuildFire(Fire, Mouse3D.GetMouseWorldPosition());
+RTimeBool =true;
     } 
+ if (RTimeBool==true){
+    ResponseTimer+=1f*Time.deltaTime;
+ } else{
+    ResponseTimer = ResponseTimer;
+    RTimeBool =false;
+ }  
+
+  if(Input.GetKeyDown("space")){ 
+    RTimeBool = false;
+    }
    }
 private void FixedUpdate() {
   // Debug.Log("number of players counting"+ player.Count);
@@ -119,7 +135,7 @@ return null;
        pathfinding.GetNode(x+1,z-1).SetIsWalkable(false); 
       }
    }
-
+   
    }
 public void buildLandscape(){
 wall.createWallSeqX(WallTransformX,(float)5,0,15);
