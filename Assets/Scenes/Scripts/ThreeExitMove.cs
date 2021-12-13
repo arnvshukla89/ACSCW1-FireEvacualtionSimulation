@@ -4,19 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 public class ThreeExitMove : MonoBehaviour
 {
  [SerializeField] private Transform Character1;
 [SerializeField] private Transform Character2;
+
       private int currentPathIndex;
     private List<Vector3> pathVectorList;
     private List<Transform> CharacterList;
-
+    private Rigidbody rb;
     private float rotationSpeed =720f;
-     public TextMeshProUGUI timeCounter;
-     private static float time =0f;
+     
+     private static float time;
+     public float timer{ get { return time; } }
      private static int Evacuationcounter = 0;
-private static int collisioncounter =0;
+     private static bool timerbool=false;
+     private int collisionmethodCounter =0;
+     private int MovingonmethodCounter =0;
+     private static Dictionary<string, int> FarthestCharacter =new Dictionary<string, int>();
 public int EvacuationcounterGS{
     get {return Evacuationcounter;}
     set{ Evacuationcounter += value;}
@@ -24,20 +30,28 @@ public int EvacuationcounterGS{
     private TimeSpan timePlaying;
     private bool timerGoing;
     private float elapsedTime;
-public Button play;
     private List<Vector3> CollidingObjects= new List<Vector3>();
-    private bool collision;
+      private static string max = null;
+    private static bool collision =false;
+    private static Vector3 collidingwiththisbody;
+    private static Vector3 mainbody;
 private bool simulationstarted = false;
 public bool SimulationGetSet{
     get {return simulationstarted;}
     set{ simulationstarted = value;}
 }
     private bool ButtonClicked;
+
+    public event EventHandler<OnCollisionEvent> oncollision;
 public static ThreeExitMove Instance { get; private set; }
+
+ public class OnCollisionEvent : EventArgs {
+        public Vector3 bodyP;
+        public Vector3 colliderP;
+    }
 
   private void Awake() {
       Instance =this;
-        collision= false;
         ButtonClicked = false;
         if(Input.GetKeyDown("space")){  
      SimulationGetSet = true;    
@@ -48,115 +62,161 @@ public static ThreeExitMove Instance { get; private set; }
     private void start(){  
     }
     private void Update() {
+        if(transform.name.Contains("player")){
      CharacterList = ChangeCharacters.Instance.characterL();
-     Debug.Log("Character list count is here" +CharacterList.Count);
+     //Debug.Log("Character list count is here" +CharacterList.Count);
+        }
      
     }
 
     private void FixedUpdate() {
-        if(CharacterList!=null){
-        if(gameObject.name == "Blocky_Dude_Red_Mobile_2(Clone)"){
-        //Timer.Create(() =>HandleMovement(25f),1f);
-        //HandleMovement(25f);
-        StartCoroutine(HandleMovement(15f));
-        }
-          else if (gameObject.name =="Blocky_Girl_Green_Mobile(Clone)"){
-        //Timer.Create(() =>HandleMovement(15f),1f);
-       // HandleMovement(15f);
-       StartCoroutine(HandleMovement(10f));
-        }
-        else{
-            Debug.Log("Game object name...its not able to find"  + gameObject.name);
-        }
-        if(Input.GetKeyDown("space")){     
+         rb = GetComponent<Rigidbody>();
+         if(GetName().Contains("player")){   
+     StartCoroutine(HandleMovement(5f));
+      // HandleMovement(5f);
+   //StartCoroutine(handleMovementWithCollision(5f));
+         }
+        if(Input.GetKeyDown("space")){ 
+            if(GetName().Contains("player")){
            SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));
+            }
           // Timer.Create(() => SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f)),1f);
         }
-   // SimulationGetSet = false;
-     // play.onClick.AddListener(SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f)));   
-        }
+        
+        
+        
     }
 
+ /*   IEnumerator handleMovementWithCollision(float speed){
+if(collision == true){
+    Debug.Log("This is collider and main body position:"+collidingwiththisbody+mainbody+"and this is the current moving body position"+GetPosition());
+          if(collidingwiththisbody == GetPosition()|| mainbody == GetPosition() ){
+//Timer.Create(() => HandleMovement(speed),10f);
+yield return new WaitForSeconds(2f);
+Debug.Log("Waiting time");
+HandleMovement(speed);
+collision =false;
+collidingwiththisbody=Vector3.zero;
+mainbody = Vector3.zero;
+          } else{
+HandleMovement(speed);
+collision =false;
+collidingwiththisbody=Vector3.zero;
+mainbody = Vector3.zero;
+          }     
 
-    private void OnCollisionEnter(Collision other) {
-        if((gameObject.name =="Blocky_Dude_Red_Mobile_2(Clone)" && other.gameObject.name =="Blocky_Dude_Red_Mobile_2(Clone)")||(gameObject.name =="Blocky_Dude_Red_Mobile_2(Clone)" && other.gameObject.name =="Blocky_Girl_Green_Mobile(Clone)")||(gameObject.name =="Blocky_Girl_Green_Mobile(Clone)" && other.gameObject.name =="Blocky_Girl_Green_Mobile(Clone)")||(gameObject.name =="Blocky_Girl_Green_Mobile(Clone)" && other.gameObject.name =="Blocky_Dude_Red_Mobile_2(Clone)")){
-   Debug.Log(gameObject.name+"Collission happening" + other.gameObject.name);  
-Vector3 collider2 = other.gameObject.transform.position;
-Vector3 collider1 = gameObject.transform.position;
-Debug.Log("Collider positions 2" + collider2);
-Debug.Log("Transform position in collision" + transform.position);
-if(collider2 == other.gameObject.transform.position){
-collision =true;
+
+
 }else{
-    collision=false;
+HandleMovement(speed); 
+collision=false;
+collidingwiththisbody=Vector3.zero;
+mainbody = Vector3.zero;
 }
- }else{
-     collision=false;
+
+    } */
+
+
+  public void OnCollisionEnter(Collision other ) {
+        if(gameObject.transform.name.Contains("player") && other.gameObject.transform.name.Contains("player")){
+            collisionmethodCounter++;
+            Debug.Log("Collisionmethod counter"+collisionmethodCounter);
+            if(gameObject.transform.position.x>other.gameObject.transform.position.x){
+            Debug.Log("About the first body" +gameObject.transform.name+gameObject.transform.position);
+              Debug.Log("About the second colliding body" +other.gameObject.transform.name+other.gameObject.transform.position);
+              Debug.Log("Collision counter");
+                 Debug.Log(gameObject.transform.name+"Collission happening" + other.gameObject.transform.name); 
+string body = gameObject.transform.name; 
+string collider = other.gameObject.transform.name;
+Vector3 colliderP =other.gameObject.transform.position;
+Vector3 bodyP =gameObject.transform.position;
+oncollision?.Invoke(this,new OnCollisionEvent{ bodyP = bodyP, colliderP = colliderP});
+/*if(colliderP ==rb.transform.position){
+}
+collidingwiththisbody = colliderP;
+mainbody =bodyP;*/
         }
+
     }
-  
-      IEnumerator WaitOneSecond()
-      {
-          yield return new WaitForSeconds(3f);
-  Debug.Log("Delaying for 3 seconds");
-         //character.SetActive (false);
-      }
-    private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.name =="Blocky_Dude_Red_Mobile_2(Clone)"){
-        Debug.Log(gameObject.name+"Trigger happening" + other.gameObject.name);  
-        }
+    }
+      private void OnCollisionStay(Collision other) {
+        if(gameObject.transform.name.Contains("player") && other.gameObject.transform.name.Contains("player")){
+   //Debug.Log(gameObject.transform.name+"Collission happening" + other.gameObject.transform.name);  
+   string x = gameObject.transform.name;
+   string y = other.gameObject.transform.name;
+    }
     }
 
     
+     
+     IEnumerator waitforsomeTime(float time ){
+          yield return new WaitForSeconds(time);
+     }
+
+public void moveCharacters(Vector3 TargetPosition,Vector3 position, float speed){
+Vector3 Direction = (TargetPosition-position).normalized;
+position = position +Direction *speed*Time.deltaTime;
+}
+
      IEnumerator HandleMovement(float speed) {
         if (pathVectorList != null) {
             Vector3 targetPosition = pathVectorList[currentPathIndex];
             //Debug.Log("Current path Index in HandleMovement method before increment" + currentPathIndex);
-            float distanceBefore = Vector3.Distance(transform.position, targetPosition)*2;
+            float distanceBefore = Vector3.Distance(rb.transform.position, targetPosition)*2;
             if (Vector3.Distance(transform.position, targetPosition) > 1f) {
-                Vector3 moveDir = (targetPosition - transform.position).normalized;
-              /*  if(CollidingObjects != null){
-                    Debug.Log("Count of colliding objects inside Handle method"+CollidingObjects.Count);
-                    foreach (Vector3 c in CollidingObjects)
-                    {
-                        Debug.Log("Colliding objects in handleMovement" + c);
-                        Debug.Log("Transform position objects in handleMovement" + transform.position);
-                         if(collision== true){
-                             if(c==transform.position){
-                  yield return new WaitForSeconds(1f);
-                             }
-                }
-                    }
-                    collision = false;
-                }*/
-                if(collision== true){
-                   yield return new WaitForSeconds(0.2f);
-                   collisioncounter++;
-                   Debug.Log("Collision counter"+ collisioncounter);
-                  collision = false; 
-                }
-                transform.position = transform.position + moveDir * speed * Time.deltaTime;
-                 time = Mathf.Abs(((Vector3.Distance(transform.position, targetPosition) *2)/speed)-distanceBefore/speed);
-                 double timerMain = Math.Round(Convert.ToDouble(time),5);
-             Debug.Log("this the eucledean distance:" + Vector3.Distance(transform.position, targetPosition));
+                Vector3 moveDir = (targetPosition - rb.transform.position).normalized;
+               // rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime;
+            // Debug.Log("this eucledean distance travelled:" + Mathf.Abs((Vector3.Distance(transform.position, targetPosition)*2)-distanceBefore));
+             //-------------------------------------------------------///
+
+oncollision = (object sender,OnCollisionEvent eventArgs) =>{
+    Debug.Log("This is collider and main body position:"+eventArgs.colliderP+eventArgs.bodyP+"and this is the current moving body position"+rb.transform.position);
+if(eventArgs.bodyP == rb.transform.position){
+
+    Debug.Log("Inside the bodyP and current position"+eventArgs.bodyP+rb.transform.position);
+    Debug.Log("Waiting");
+    MovingonmethodCounter++;
+    Debug.Log("Movingmethod counter"+MovingonmethodCounter);
+    collision = true;
+//Timer.Create(() => moveCharacters(rb.transform.position,moveDir,speed),1f);
+}
+
+};
+if(collision ==true){
+    yield return new WaitForSeconds(0.2f);
+    collision = false;
+}
+rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime; 
+
+
+             ///----------------------------------------------------------------//
+            
+            if(rb.transform.name == max){
+            time +=(Mathf.Abs((Vector3.Distance(rb.transform.position, targetPosition)*2)-distanceBefore)/speed);
             Debug.Log("this the time without round off:" + time);
-            Debug.Log("this the time:" + timerMain);
+            }
+            //Debug.Log("this the time:" + timerMain);
             if(moveDir!= Vector3.zero){
-                //transform.forward =moveDir;rotationSpeed
                 Quaternion CharRotation = Quaternion.LookRotation(moveDir,Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation,CharRotation,rotationSpeed * Time.deltaTime); 
 
             }
+               
             
             } else {
                 currentPathIndex++;
+              
                 if (currentPathIndex >= pathVectorList.Count) {
                     EvacuationcounterGS =1;
-                    Debug.Log("Evacuation Counting" +EvacuationcounterGS);
                     CharacterList.Remove(gameObject.transform);
+                    if(gameObject.transform.name==max){
+                    time=0f;
+                    }
                     Destroy(gameObject);
+                      if(CharacterList.Count==0){
+                        timerbool =false;
+                    }
                     StopMoving();
-                   // Debug.Log("Character list after removing the initial location of the character" + CharacterList.Count);
 
                 }
             }
@@ -171,44 +231,47 @@ collision =true;
     }
 
     public Vector3 GetPosition() {
-        return transform.position;
+        return rb.transform.position;
     }
+      public String GetName() {
+        return transform.name;
+    }
+
 
     public void SetTargetPosition(Vector3 targetPosition, Vector3 targetPosition2,Vector3 targetPosition3) {
+      // Debug.Log("set target positionfunction is called");
         currentPathIndex = 0;
-        Debug.Log("Current path Index in SetTargetPosition method" + currentPathIndex);
-        Debug.Log("Current position in SetTargetPosition method" + GetPosition());
+       //FarthestCharacter = new Dictionary<string, int>();
+        //Debug.Log("Current path Index in SetTargetPosition method" + currentPathIndex);
+       // Debug.Log("Current position in SetTargetPosition method" + GetPosition());
         pathVectorList = Pathfinding.Instance.ShortestTarget(GetPosition(), targetPosition,targetPosition2,targetPosition3);
-//        Debug.Log("pathVectorList in SetTargetPosition method" + pathVectorList.Count);
+ //Debug.Log("pathVectorList in SetTargetPosition method" + pathVectorList.Count);
+ if(GetName().Contains("player")){
+     if(FarthestCharacter !=null && !FarthestCharacter.ContainsKey(GetName())){
+     FarthestCharacter.Add(GetName(),pathVectorList.Count);
+     }
+     //Debug.Log("adding into dictionary");
+     //Debug.Log(GetName()+"Added");
+ }
+ foreach (var item in FarthestCharacter)
+ {
+  // Debug.Log("This is inside the dictionary" + item.Key + item.Value);  
+   //Debug.Log("Looping inside dictionary");
+   //Debug.Log("FarthestList count" + FarthestCharacter.Count);
+ }
+ 
+  //Debug.Log("CharacterList count" + CharacterList.Count);
+ if(FarthestCharacter.Count == CharacterList.Count){
+   max = FarthestCharacter.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+   //Debug.Log("Character at farhest distance" + max);
+    }
+  
         if (pathVectorList != null && pathVectorList.Count > 1) {
-            pathVectorList.RemoveAt(0);
+            pathVectorList.RemoveAt(0);      
      
-         }
-         
-    }
-   public void BeginTimer()
-    {
-        timerGoing = true;
-        elapsedTime = 0f;
+         }  
+  
 
-        StartCoroutine(UpdateTimer());
     }
-
-    public void EndTimer()
-    {
-        timerGoing = false;
-    }
-
-    private IEnumerator UpdateTimer()
-    {
-        while (timerGoing)
-        {
-            elapsedTime += Time.deltaTime;
-            timePlaying = TimeSpan.FromSeconds(elapsedTime);
-            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss'.'ff");
-            timeCounter.text = timePlayingStr;
-
-            yield return null;
-        }
-    }
+  
 }
