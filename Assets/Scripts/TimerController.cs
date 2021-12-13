@@ -9,7 +9,8 @@ public class TimerController : MonoBehaviour
 
 public static TimerController Instance { get; private set; }
    [SerializeField] private TextMeshProUGUI SimulationTiming;
-       private float time;
+       private static float time;
+       private float RTime=0f;
 
        private void Awake() {
            Instance =this;
@@ -18,11 +19,18 @@ public static TimerController Instance { get; private set; }
           SimulationTiming.text="Time: 00:00:000";
        }
        private void FixedUpdate() {
-
-           if(ChangeCharacters.Instance.numberofPlayers>0){
-            time = ThreeExitMove.Instance.timer;
+   
+    if(GridSystem.Instance.Rtimerbool == true){
+         RTime =GridSystem.Instance.Rtimer;
+    DisplayTime(RTime);
+    }else{
+           if(ChangeCharacters.Instance.numberofPlayers>0 ){
+            time = ThreeExitMove.Instance.timer + RTime; 
          DisplayTime(time);
        }
+    }
+      
+      
 }
     public void DisplayTime(float timeToDisplay)
     {
