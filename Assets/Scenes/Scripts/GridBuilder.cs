@@ -42,7 +42,7 @@ private Vector3 originalPosition;
          }
      }
      
-      bool showDebug=true;
+     /* bool showDebug=true;
       if(showDebug){
       TextMesh[,] debugArray= new TextMesh[width, height];
      for (int x = 0; x<GridMatrix.GetLength(0); x++){
@@ -58,7 +58,7 @@ private Vector3 originalPosition;
    OnGridValueChanged += (object sender, OnGridValueChangedEventArgs eventArgs) => {
                 debugArray[eventArgs.x, eventArgs.z].text = GridMatrix[eventArgs.x, eventArgs.z]?.ToString();
    };
-      }
+      }*/
   }
   public int GetWidth() {
         return width;
