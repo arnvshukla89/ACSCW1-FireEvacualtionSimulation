@@ -1,3 +1,8 @@
+/*-------------------------------------------
+
+Class:NumberofPlayers
+Functionality:Display the number of occupants and number of people evacuated on screen
+//---------------------------------------------------*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

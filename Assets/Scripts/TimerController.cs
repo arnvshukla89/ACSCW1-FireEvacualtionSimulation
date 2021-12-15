@@ -1,4 +1,10 @@
-﻿using System;
+﻿
+/*-------------------------------------------
+
+Class:TimerController
+Functionality:Displaying movetime and response time
+//---------------------------------------------------*/
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,3 +1,8 @@
+/*-------------------------------------------
+
+Class:GridSystem
+Functionality:Main class to Instantiate Grid, Pathfinding, Spawning characters, Fire, Response timer and Floor map
+//---------------------------------------------------*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,30 +44,32 @@ private GridBuilder<PathNode> grid2;
     public Pathfinding GetPath(){
        return pathfinding;
    }
-   
+   /*-------------------------------------
+
+   Functionality: Instantiating Grid and pathpathfinding
+   Methods:Awake()
+   Params:
+   --------------------------------------*/
    private void Awake() {
       Instance = this;
        int gridWidth = 35;
        int gridHeight = 25;
        float cellSize =5f;
 
-       //grid = new GridBuilder<PathNode>(gridWidth, gridHeight, cellSize, Vector3.zero, (GridBuilder<PathNode> g, int x , int z) => new PathNode(g , x , z));
-       grid = new GridBuilder<PathNode>(gridWidth, gridHeight, cellSize, Vector3.zero, (GridBuilder<PathNode> g, int x , int z) => new PathNode(g , x , z));
-       //grid1 = new GridBuilder<PathNode>(25, 10, cellSize, new Vector3(75,0,0), (GridBuilder<PathNode> g1, int x1 , int z1) => new PathNode(g1 , x1 , z1));
-//grid2=new GridBuilder<PathNode>(20, 15, cellSize, new Vector3(75,0,50), (GridBuilder<PathNode> g2, int x2 , int z2) => new PathNode(g2 , x2 , z2));
+grid = new GridBuilder<PathNode>(gridWidth, gridHeight, cellSize, Vector3.zero, (GridBuilder<PathNode> g, int x , int z) => new PathNode(g , x , z));
 pathfinding= new Pathfinding(grid);
-pathfinding1 =new Pathfinding(grid);
-pathfinding2 = new Pathfinding(grid);
 wall = new BuildWall(grid,pathfinding);
 player =new List<GameObject>();
 buildLandscape();
    }
 
+ /*-------------------------------------
+
+   Functionality: Response Timer implementation
+   Methods:Update()
+   Params:
+   --------------------------------------*/
 private void Update() {
-    /* if(Input.GetMouseButtonDown(0)){
-buildaCharacter(Character,Mouse3D.GetMouseWorldPosition());
-player.Add(GameObject.Find("Blocky_Dude_Red_Mobile_2"));
-    }*/
          if(Input.GetMouseButtonDown(1)){
 BuildFire(Fire, Mouse3D.GetMouseWorldPosition());
 RTimeBool =true;
@@ -78,40 +85,34 @@ RTimeBool =true;
     RTimeBool = false;
     }
    }
-private void FixedUpdate() {
-  // Debug.Log("number of players counting"+ player.Count);
-   // if(Input.GetKeyDown("space")){
- //charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));
- //Timer.Create(() => charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f)),1f);    
-   // charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));
-    //}
- //if(player.Count>0){
-  //charM.SetTargetPosition(new Vector3(2.5f, 0, 32.5f),new Vector3(97.5f, 0, 2.5f),new Vector3(172.5f, 0, 72.5f));  
- //}
-}
+     /*-------------------------------------
+   Functionality: Spawning a Character on Grid node
+   Methods:buildaCharacter()
+   Params: Prefab, Position to spawn
+   --------------------------------------*/
    public Transform buildaCharacter(Transform prefab, Vector3 PrefabPosition){
          //Vector3 blockchar = ((new Vector3(5,0,5) * 5f) + (new Vector3(1,0,1) * 2.5f));
         pathfinding.GetGridBuilder().GetXZ(PrefabPosition, out int x, out int z);
-   //Debug.Log(Mouse3D.GetMouseWorldPosition());
    PathNode pathNode =grid.getValue(x,z);
-  //Debug.Log("This is pathnode" + pathNode);
    if(pathNode.CanBuild()){
   Transform builtT = Instantiate(prefab,grid.GetWorldPosition(x,z)+(new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
-  //Instantiate(prefab,grid.GetWorldPosition(x,z)+ (new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
    builtT.name ="player" + transform_index;
    transform_index ++;
    pathNode.SetTransform(builtT);
-  //pathfinding.GetNode(x,z).SetIsWalkable(false);  
   return builtT; 
    }
 return null;
    } 
+      /*-------------------------------------
+
+   Functionality: Spawning a Fire on Grid node and blocking neigbouring nodes
+   Methods:BuildFire()
+   Params: Prefab, Position to spawn
+   
+   --------------------------------------*/
       public void BuildFire(Transform prefab, Vector3 PrefabPosition){
-         //Vector3 blockchar = ((new Vector3(5,0,5) * 5f) + (new Vector3(1,0,1) * 2.5f));
         pathfinding.GetGridBuilder().GetXZ(PrefabPosition, out int x, out int z);
-   //Debug.Log(Mouse3D.GetMouseWorldPosition());
    PathNode pathNode =grid.getValue(x,z);
-  //Debug.Log("This is pathnode" + pathNode);
    if(pathNode.CanBuild()){
   Transform builtT = Instantiate(prefab,grid.GetWorldPosition(x,z)+(new Vector3(1,0,1) * 2.5f), Quaternion.Euler(Vector3.up * 90));
    pathNode.SetTransform(builtT);
@@ -137,6 +138,12 @@ return null;
    }
    
    }
+
+   /*-------------------------------------
+
+   Functionality: Building Floor map on the grid
+   Methods:buildLandscape()
+   --------------------------------------*/
 public void buildLandscape(){
 wall.createWallSeqX(WallTransformX,(float)5,0,15);
   wall.createCorner(Corner3,new Vector3(85,0,0),0);
@@ -152,8 +159,7 @@ wall.createWallSeqX(WallTransformX,(float)5,0,15);
   wall.createWallSeqZ(WallTransformZ,(float)172.65,5,11);
   wall.createWallSeqZ(WallTransformZ,(float)172.65,75,8);
   wall.createCorner(Corner4,new Vector3((float)172.5,0,120),0);
-  //wall2.createWallSeqX(WallTransformX,80,(float)122.73,60);
-   //wall.createWall(WallTransformZ,5,0,(float)0.1,new Vector3((float)0.5,3,35));
+
 
 ///Building rooms
   wall.createWallSeqX(WallTransformX,(float)5,(float)22.5,7);

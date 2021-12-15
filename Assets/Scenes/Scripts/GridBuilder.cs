@@ -1,3 +1,9 @@
+ /*-------------------------------------------
+
+Class:GridBuilder<T>
+Functionality:Base class for building grid object
+//---------------------------------------------------*/    
+     
      using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +22,13 @@ public class GridBuilder<TGridBuilderObject>
   private int height;
 private float cellSize;
 private Vector3 originalPosition;
+
+ /*-------------------------------------
+
+   Functionality: Instantiate grid with grid nodes
+   Methods:GridBuilder()
+   Params:Width, height, cellsize, Gridnode objects with grid position rendered as text meshes
+   --------------------------------------*/
 
   private TGridBuilderObject[,] GridMatrix;
   public GridBuilder(int width, int height, float cellSize,Vector3 originalPosition, Func<GridBuilder<TGridBuilderObject>,int,int,TGridBuilderObject> createGridObject){
@@ -60,11 +73,16 @@ private Vector3 originalPosition;
         return cellSize;
     }
 
-    
+     /*-------------------------------------
+
+   Functionality: set the value of tesmesh as grid coordinates
+   Methods:setValue()
+   Params:Width, x coordinate, y coordinate,value of the grid object
+   params2: Vector3 postion,value of the grid object
+   --------------------------------------*/
   public void setValue(int x, int z, TGridBuilderObject value){
       if(x >= 0 && z >= 0 && x < width && z < height)
       {
-      // GridMatrix[x, y] = Mathf.Clamp(value, HEAT_MAP_MIN_VALUE, HEAT_MAP_MAX_VALUE);
       GridMatrix[x, z] = value;
       if (OnGridValueChanged != null) OnGridValueChanged(this, new OnGridValueChangedEventArgs { x = x, z = z });
       }
@@ -75,15 +93,25 @@ private Vector3 originalPosition;
       setValue(x,z,value);
 
   }
-  public void TriggeredGridObjectChange(int x, int z){
-  if (OnGridValueChanged != null) OnGridValueChanged(this, new OnGridValueChangedEventArgs { x = x, z = z });
+   /*-------------------------------------
 
-  }
+   Functionality: get X and Z coordinates of the grid
+   Methods:GetXZ()
+   params: Vector3 postion,x* coordinate, z* coordinate
+   --------------------------------------*/
   public void GetXZ(Vector3 worldPosition, out int x, out int z){
       x= Mathf.FloorToInt((worldPosition-originalPosition).x/cellSize);
       z= Mathf.FloorToInt((worldPosition-originalPosition).z/cellSize);
 
   }
+   /*-------------------------------------
+
+   Functionality: get grid object 
+   Methods:getValue()
+   params: x grid coordinate, z grid coordinate
+   params2: Vector3 world position
+   return: gridnode object
+   --------------------------------------*/
   public TGridBuilderObject getValue(int x,int z)   {
       if(x >= 0 && z >= 0 && x < width && z < height){
         return GridMatrix[x, z];  
@@ -99,7 +127,6 @@ private Vector3 originalPosition;
       int x,z;
       GetXZ(worldPosition,out x, out z);
       return getValue(x,z);
-      //addition
   }
 }
 

@@ -1,3 +1,8 @@
+/*-------------------------------------------
+
+Class:ThreeExitMove
+Functionality:Class to move the character according to A* pathfinding, detect collision, calculate move time , rotate characters
+//---------------------------------------------------*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,7 +69,7 @@ public static ThreeExitMove Instance { get; private set; }
     private void Update() {
         if(transform.name.Contains("player")){
      CharacterList = ChangeCharacters.Instance.characterL();
-     //Debug.Log("Character list count is here" +CharacterList.Count);
+
         }
      
     }
@@ -87,35 +92,12 @@ public static ThreeExitMove Instance { get; private set; }
         
     }
 
- /*   IEnumerator handleMovementWithCollision(float speed){
-if(collision == true){
-    Debug.Log("This is collider and main body position:"+collidingwiththisbody+mainbody+"and this is the current moving body position"+GetPosition());
-          if(collidingwiththisbody == GetPosition()|| mainbody == GetPosition() ){
-//Timer.Create(() => HandleMovement(speed),10f);
-yield return new WaitForSeconds(2f);
-Debug.Log("Waiting time");
-HandleMovement(speed);
-collision =false;
-collidingwiththisbody=Vector3.zero;
-mainbody = Vector3.zero;
-          } else{
-HandleMovement(speed);
-collision =false;
-collidingwiththisbody=Vector3.zero;
-mainbody = Vector3.zero;
-          }     
+/*-------------------------------------
 
-
-
-}else{
-HandleMovement(speed); 
-collision=false;
-collidingwiththisbody=Vector3.zero;
-mainbody = Vector3.zero;
-}
-
-    } */
-
+   Functionality: detects collision and triggers the event 'oncollision' which is subscribed in the handle movement method
+   Methods:OnCollisionEnter()
+   Params:Collision gameobject
+   --------------------------------------*/
 
   public void OnCollisionEnter(Collision other ) {
         if(gameObject.transform.name.Contains("player") && other.gameObject.transform.name.Contains("player")){
@@ -130,7 +112,7 @@ string body = gameObject.transform.name;
 string collider = other.gameObject.transform.name;
 Vector3 colliderP =other.gameObject.transform.position;
 Vector3 bodyP =gameObject.transform.position;
-//oncollision?.Invoke(this,new OnCollisionEvent{ bodyP = bodyP, colliderP = colliderP});
+oncollision?.Invoke(this,new OnCollisionEvent{ bodyP = bodyP, colliderP = colliderP});
 /*if(colliderP ==rb.transform.position){
 }
 collidingwiththisbody = colliderP;
@@ -140,13 +122,6 @@ collision = true;
 
     }
     }
-      private void OnCollisionStay(Collision other) {
-        if(gameObject.transform.name.Contains("player") && other.gameObject.transform.name.Contains("player")){
-   //Debug.Log(gameObject.transform.name+"Collission happening" + other.gameObject.transform.name);  
-   string x = gameObject.transform.name;
-   string y = other.gameObject.transform.name;
-    }
-    }
 
     
      
@@ -154,37 +129,20 @@ collision = true;
           yield return new WaitForSeconds(time);
      }
 
-public void moveCharacters(Vector3 TargetPosition,Vector3 position, float speed){
-Vector3 Direction = (TargetPosition-position).normalized;
-position = position +Direction *speed*Time.deltaTime;
-}
 
+/*-------------------------------------
+
+   Functionality: Move characters, rotate characters,move timer calculations
+   Methods:HandleMovement()
+   Params:float speed
+   --------------------------------------*/
      IEnumerator HandleMovement(float speed) {
         if (pathVectorList != null) {
             Vector3 targetPosition = pathVectorList[currentPathIndex];
-            //Debug.Log("Current path Index in HandleMovement method before increment" + currentPathIndex);
             float distanceBefore = Vector3.Distance(rb.transform.position, targetPosition)*2;
             if (Vector3.Distance(transform.position, targetPosition) > 1f) {
                 Vector3 moveDir = (targetPosition - rb.transform.position).normalized;
-               // rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime;
-            // Debug.Log("this eucledean distance travelled:" + Mathf.Abs((Vector3.Distance(transform.position, targetPosition)*2)-distanceBefore));
-             //-------------------------------------------------------///
-
-/*oncollision = (object sender,OnCollisionEvent eventArgs) =>{
-    Debug.Log("This is collider and main body position:"+eventArgs.colliderP+eventArgs.bodyP+"and this is the current moving body position"+rb.transform.position);
-if(eventArgs.bodyP == rb.transform.position){
-
-    Debug.Log("Inside the bodyP and current position"+eventArgs.bodyP+rb.transform.position);
-    Debug.Log("Waiting");
-    MovingonmethodCounter++;
-    Debug.Log("Movingmethod counter"+MovingonmethodCounter);
-    collision = true;
-//Timer.Create(() => moveCharacters(rb.transform.position,moveDir,speed),1f);
-}
-
-};*/
 if(collision ==true){
-    //yield return new WaitForSeconds(0.5f);
     yield return new WaitForSeconds(0.1f);
     collision = false;
     if(rb.transform.name == max){
@@ -194,13 +152,11 @@ if(collision ==true){
 rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime; 
 
 
-             ///----------------------------------------------------------------//
             
             if(rb.transform.name == max){
             time +=(Mathf.Abs((Vector3.Distance(rb.transform.position, targetPosition)*2)-distanceBefore)/speed);
             Debug.Log("this the time without round off:" + time);
             }
-            //Debug.Log("this the time:" + timerMain);
             if(moveDir!= Vector3.zero){
                 Quaternion CharRotation = Quaternion.LookRotation(moveDir,Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation,CharRotation,rotationSpeed * Time.deltaTime); 
@@ -239,34 +195,30 @@ rb.transform.position = rb.transform.position + moveDir * speed * Time.deltaTime
         return transform.name;
     }
 
+/*-------------------------------------
 
+   Functionality: Set target position for the characters, select the character which will be exiting last
+   Methods:SetTargetPosition()
+   Params:Vector3 Target Position1,Vector3 Target Position2, Vector3 Target Position3
+   --------------------------------------*/
     public void SetTargetPosition(Vector3 targetPosition, Vector3 targetPosition2,Vector3 targetPosition3) {
-      // Debug.Log("set target positionfunction is called");
         currentPathIndex = 0;
-       //FarthestCharacter = new Dictionary<string, int>();
-        //Debug.Log("Current path Index in SetTargetPosition method" + currentPathIndex);
-       // Debug.Log("Current position in SetTargetPosition method" + GetPosition());
         pathVectorList = Pathfinding.Instance.ShortestTarget(GetPosition(), targetPosition,targetPosition2,targetPosition3);
- //Debug.Log("pathVectorList in SetTargetPosition method" + pathVectorList.Count);
+
 
  if(GetName().Contains("player")){
      if(FarthestCharacter !=null && pathVectorList!=null&&!FarthestCharacter.ContainsKey(GetName())){
      FarthestCharacter.Add(GetName(),pathVectorList.Count);
      }
-     //Debug.Log("adding into dictionary");
-     //Debug.Log(GetName()+"Added");
  }
  foreach (var item in FarthestCharacter)
  {
-  // Debug.Log("This is inside the dictionary" + item.Key + item.Value);  
-   //Debug.Log("Looping inside dictionary");
-   //Debug.Log("FarthestList count" + FarthestCharacter.Count);
+  
  }
  
-  //Debug.Log("CharacterList count" + CharacterList.Count);
+  
  if(FarthestCharacter.Count == CharacterList.Count){
    max = FarthestCharacter.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
-   //Debug.Log("Character at farhest distance" + max);
     }
   
         if (pathVectorList != null && pathVectorList.Count > 1) {

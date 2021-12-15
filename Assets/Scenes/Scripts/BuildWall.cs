@@ -1,3 +1,8 @@
+/*-------------------------------------------
+
+Class:BuildWall
+Functionality:Building walls on grid positions
+//---------------------------------------------------*/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,12 +23,25 @@ createWallX(prefab,StartX,StartZ);
 StartX = StartX + 5f;
 }
 }
+
+  /*-------------------------------------
+
+   Functionality: Spawn a wall on Z axis
+   Methods:createWallSeqZ()
+   Params:Transform object, Start X value, STart Z value, number of grid nodes to cover
+   --------------------------------------*/
 public void createWallSeqZ(Transform prefab,float StartX,float StartZ,float blockNumbers){
 for (int i=0; i<=blockNumbers; i++){
 createWallX(prefab,StartX,StartZ);
 StartZ=StartZ + 5f;
 }
 }
+/*-------------------------------------
+
+   Functionality: Spawn a wall on X axis
+   Methods:createWallSeqX()
+   Params:Transform object, Start X value, STart Z value)
+   --------------------------------------*/
 public void createWallX(Transform prefab,float x, float z){
   Vector3 vec1 = new Vector3(x,0,z);   
   //Vector3 vec1 = new Vector3(x,0,z)* 5f+ (new Vector3(1,0,1) * 2.5f);
@@ -36,6 +54,12 @@ if(pathNode.CanBuild()){
    pathfinding.GetNode(xcord,zcord).SetIsWalkable(false);  
 }
 }
+/*-------------------------------------
+
+   Functionality: Spawn Corners
+   Methods:createCorner()
+   Params:Transform object, spaw position, rotation value
+   --------------------------------------*/
 public void createCorner(Transform prefab1,Vector3 position,float rotation){
  
    Vector3 vec1 = position;     
