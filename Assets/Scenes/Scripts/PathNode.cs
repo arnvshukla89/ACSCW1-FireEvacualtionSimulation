@@ -1,3 +1,9 @@
+/*-------------------------------------------
+
+Class:PathNodes
+Functionality:Setting a grid node as unwakable area, Disabling build feature for already built pathnodes, Calculating FCost
+//---------------------------------------------------*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

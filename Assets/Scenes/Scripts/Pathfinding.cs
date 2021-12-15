@@ -1,3 +1,9 @@
+/*-------------------------------------------
+
+Class:Pathfinding
+Functionality:A* Path finding implementation, Exit selection based on heuristic value
+//---------------------------------------------------*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +15,6 @@ public class Pathfinding{
     public GridBuilder<PathNode> builder;
     private List<PathNode> openList;
     private List<PathNode> closedList;
-  /* public Pathfinding(int width, int height){
-        Instance = this;
-      builder = new GridBuilder<PathNode>(width, height, 5f, Vector3.zero,(GridBuilder<PathNode> g, int x, int y) => new PathNode(g,x,y));  
-   }*/
 public Pathfinding(GridBuilder<PathNode> builder){
        Instance = this;
       this.builder = builder;
@@ -20,6 +22,13 @@ public Pathfinding(GridBuilder<PathNode> builder){
    public GridBuilder<PathNode> GetGridBuilder(){
        return builder;
    } 
+
+    /*-------------------------------------
+
+   Functionality: Selection of shortest exit from three exits based on heuristic value
+   Methods:ShortestTarget()
+   Params:Start Position, Target1 Position,Target2 Position,Target3 Position
+   --------------------------------------*/
      
      public List<Vector3> ShortestTarget (Vector3 StartPosition, Vector3 T1, Vector3 T2, Vector3 T3){
     builder.GetXZ(StartPosition , out int startX, out int startZ);
@@ -113,7 +122,13 @@ int d3= calculateDistance(startNode,Target3);
      }
      return null;        
      }
-     
+      /*-------------------------------------
+
+   Functionality: Calls the Findpath() method and returns a list of vector3 
+   Methods:FindPath()
+   Params:Start Position, Target1 Position
+   Return: Path List<Vector3>
+   --------------------------------------*/
       public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition){
        builder.GetXZ(startWorldPosition , out int startX, out int startZ);
    builder.GetXZ(endWorldPosition, out int endX, out int endZ);
@@ -129,6 +144,16 @@ List<PathNode> path = FindPath(startX, startZ, endX , endZ);
       return vectorPath;
   }
    }
+
+     /*-------------------------------------
+
+   Functionality: Calls the Findpath() method and returns a list of vector3 
+   Methods:FindPath()
+   Params:X value of Start Pathnode ,Z value of Start Pathnode ,X value of Target Pathnode, Z value of Target Pathnode 
+   Return: Path List<Pathnodes>
+   Generic: Pathnode object
+   Source: CodeMonkey.com
+   --------------------------------------*/
 
    public List<PathNode> FindPath(int startX, int startZ, int endX, int endZ){
       PathNode startNode=builder.getValue(startX,startZ);
@@ -186,6 +211,15 @@ foreach (PathNode neighbourNode in GetNeighbourList(currentNode)){
    return null;
    }
 
+  /*-------------------------------------
+
+   Functionality: Search for the immediate neighbours of the current Node
+   Methods:GetNeighbourList
+   Params:Current Node value
+   Return: Neighbour nodes List<Pathnodes>
+   Generic: Pathnode object
+   Source: CodeMonkey.com
+   --------------------------------------*/
 private List<PathNode> GetNeighbourList(PathNode currentNode){
 List<PathNode> neighbourList =new List<PathNode>();
 if(currentNode.x -1 >= 0){
@@ -227,12 +261,29 @@ currentNode= currentNode.cameFromNode;
 path.Reverse();
 return path;
    }
+   /*-------------------------------------
+
+   Functionality: Calculate Heuristic value
+   Methods:calculateDistance()
+   Params:Current and Target Node value
+   Return: Heuristic Distance in int
+   Source: CodeMonkey.com
+   --------------------------------------*/
 private int calculateDistance(PathNode a, PathNode b){
        int xDistance = Mathf.Abs(a.x - b.x);
        int zDistance = Mathf.Abs(a.z - b.z);
        int remaining = Mathf.Abs(xDistance - zDistance);
        return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, zDistance) + MOVE_STRAIGHT_COST * remaining;
    }
+
+     /*-------------------------------------
+
+   Functionality: Calculate Heuristic value
+   Methods:GetLowestFCostNode()
+   Params:List of Grid nodes
+   Return: Pathnode with lowest value
+   Source: CodeMonkey.com
+   --------------------------------------*/ 
 
    private PathNode GetLowestFCostNode(List<PathNode> pathNodeList){
        PathNode lowestFCostNode = pathNodeList[0];

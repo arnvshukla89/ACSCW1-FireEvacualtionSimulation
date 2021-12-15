@@ -37,21 +37,15 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets/Scenes/Scripts/GridBuilder.cs" />
-     <Compile Include="Assets/Scenes/Scripts/CharacterMovement.cs" />
-     <Compile Include="Assets/Scenes/Scripts/FlyingCharacter.cs" />
      <Compile Include="Assets/Scenes/Scripts/Pathfinding.cs" />
      <Compile Include="Assets/Scenes/Scripts/ChangeCharacters.cs" />
      <Compile Include="Assets/Scenes/Scripts/PathNode.cs" />
      <Compile Include="Assets/Scenes/Scripts/Mouse3D.cs" />
-     <Compile Include="Assets/Scenes/Scripts/CreateFloor.cs" />
      <Compile Include="Assets/Scenes/Scripts/ThreeExitMove.cs" />
      <Compile Include="Assets/Scenes/Scripts/BuildWall.cs" />
-     <Compile Include="Assets/Scenes/Scripts/Timer.cs" />
      <Compile Include="Assets/Scenes/Scripts/NumberofPlayers.cs" />
-     <Compile Include="Assets/Scenes/Scripts/utils.cs" />
      <Compile Include="Assets/Scenes/Scripts/GridSystem.cs" />
      <Compile Include="Assets/Scripts/TimerController.cs" />
-     <Compile Include="Assets/Scenes/Scripts/PathfindingVisual.cs" />
      <None Include="Assets/TextMesh Pro/Resources/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Resources/Shaders/TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets/HighQualityBricks&amp;Walls/Shaders/wood-877000.shader" />
