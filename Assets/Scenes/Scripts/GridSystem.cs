@@ -40,7 +40,6 @@ private GridBuilder<PathNode> grid2;
      public bool Rtimerbool{ get { return RTimeBool;}}
      public float Rtimer{ get { return ResponseTimer; } 
      set{ ResponseTimer = value;}}
-  private utils Utils;
     public Pathfinding GetPath(){
        return pathfinding;
    }

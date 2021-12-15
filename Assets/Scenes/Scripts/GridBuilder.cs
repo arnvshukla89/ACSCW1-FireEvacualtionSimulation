@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
-using static utils;
 public class GridBuilder<TGridBuilderObject>
 {
     public event EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
@@ -93,6 +92,12 @@ private Vector3 originalPosition;
       setValue(x,z,value);
 
   }
+
+  public void TriggeredGridObjectChange(int x, int z){
+  if (OnGridValueChanged != null) OnGridValueChanged(this, new OnGridValueChangedEventArgs { x = x, z = z });
+
+  }
+
    /*-------------------------------------
 
    Functionality: get X and Z coordinates of the grid
@@ -129,4 +134,5 @@ private Vector3 originalPosition;
       return getValue(x,z);
   }
 }
+
 
